@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>David C. Jeong | Academic Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Academic website for David C. Jeong, Communication and technology scholar." />
+
+  <!-- Minimal, contemporary font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" />
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #666666;
+      --border: #e5e5e5;
+      --max-width: 900px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* HEADER / NAVBAR */
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background-color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Small circular headshot in navbar (with stroke border) */
+    .nav-photo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #cccccc;
+    }
+
+    .nav-name-group {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .nav-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    nav {
+      display: flex;
+      gap: 1.1rem;
+      font-size: 0.82rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+    }
+
+    nav a:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
+
+    /* MAIN LAYOUT */
+
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    section {
+      margin-bottom: 2.3rem;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .section-block {
+      border-top: 1px solid var(--border);
+      padding-top: 1.3rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
+      gap: 2rem;
+    }
+
+    p {
+      margin: 0 0 0.8rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    /* HERO */
+
+    .hero {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    h1 {
+      margin: 0 0 0.3rem;
+      font-size: clamp(2rem, 3vw, 2.4rem);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-role {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-description {
+      font-size: 0.92rem;
+      color: #333333;
+      max-width: 32rem;
+      line-height: 1.55;
+    }
+
+    .hero-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .hero-meta-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.7rem;
+      color: #999999;
+    }
+
+    /* Hero links (Scholar / DBLP+ORCID / LinkedIn / GitHub) */
+
+    .hero-links {
+      margin-top: 1.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    .hero-link-pill {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      background-color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hero-link-pill:hover {
+      text-decoration: underline;
+    }
+
+    /* ICONS */
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 1.6;
+      margin-right: 2px;
+    }
+
+    .icon-sm {
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+      vertical-align: -2px;
+    }
+
+    /* TAGS / LISTS */
+
+    .tag-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.3rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag-list li {
+      font-size: 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.7rem;
+      color: #444444;
+    }
+
+    .pub-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .pub-list li {
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pub-title {
+      font-weight: 500;
+    }
+
+    .pub-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .pub-theme-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin: 1.4rem 0 0.4rem;
+      color: #444444;
+    }
+
+    .pub-tags {
+      font-size: 0.75rem;
+      color: #999999;
+      margin-top: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .course-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .course-code {
+      font-weight: 500;
+      margin-right: 0.4rem;
+    }
+
+    /* ABOUT PHOTO (wider, 4:3 aspect) */
+
+    .about-photo-wrapper {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .about-photo {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 4 / 3;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid #cccccc;
+      object-fit: cover;
+    }
+
+    /* NEWS LIST */
+
+    .news-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.88rem;
+    }
+
+    .news-list li {
+      display: flex;
+      gap: 0.6rem;
+      align-items: baseline;
+      margin-bottom: 0.6rem;
+    }
+
+    .news-date {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #999999;
+      flex: 0 0 auto;
+    }
+
+    .news-text {
+      flex: 1 1 auto;
+    }
+
+    /* XR DEMO (Gaussian splat) */
+
+    .xr-demo-header {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.6rem;
+      color: #444444;
+    }
+
+    .xr-demo-description {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+      max-width: 40rem;
+    }
+
+    .xr-demo-frame {
+      width: 100%;
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+
+    .xr-demo-inner {
+      position: relative;
+      width: 100%;
+      padding-top: 62.5%; /* 16:10 aspect ratio */
+    }
+
+    .xr-demo-inner iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .xr-demo-note {
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 1.5rem;
+      padding: 1.2rem 1.25rem 2.2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      max-width: var(--max-width);
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 800px) {
+      nav {
+        display: none;
+      }
+
+      .hero-top {
+        flex-direction: column;
+      }
+
+      .two-col {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.5rem;
+      }
+
+      .about-photo-wrapper {
+        justify-content: flex-start;
+      }
+
+      .about-photo {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding-inline: 1rem;
+      }
+      footer {
+        padding-inline: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ICON SPRITE -->
+<svg style="display:none;">
+  <!-- Google Scholar -->
+  <symbol id="icon-scholar" viewBox="0 0 24 24">
+    <path d="M12 2l9 6-9 6-9-6 9-6zm0 20l-9-6 3-2 6 4 6-4 3 2-9 6zm0-8l-6-4 6-4 6 4-6 4z" stroke="currentColor" fill="none" stroke-width="1.4"/>
+  </symbol>
+
+  <!-- DBLP (simple book icon) -->
+  <symbol id="icon-dblp" viewBox="0 0 24 24">
+    <path d="M4 3h12a4 4 0 014 4v14l-4-3-4 3-4-3-4 3V7a4 4 0 014-4z" stroke="currentColor" fill="none" stroke-width="1.4"/>
+  </symbol>
+
+  <!-- ORCID -->
+  <symbol id="icon-orcid" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" stroke="currentColor" fill="none" stroke-width="1.4"/>
+    <path d="M10 10v6M14 10a2 2 0 110 4 2 2 0 010-4zM10 7h4" stroke="currentColor" stroke-width="1.4" fill="none"/>
+  </symbol>
+
+  <!-- LinkedIn -->
+  <symbol id="icon-linkedin" viewBox="0 0 24 24">
+    <path d="M4 4h4v16H4zM10 10h4v10h-4zM14 10h4v10h-4z" stroke="currentColor" fill="none" stroke-width="1.4"/>
+    <circle cx="6" cy="6" r="1.5" fill="currentColor"/>
+  </symbol>
+
+  <!-- GitHub -->
+  <symbol id="icon-github" viewBox="0 0 24 24">
+    <path d="M12 .75A11.25 11.25 0 002.25 12a11.25 11.25 0 007.68 10.68c.56.1.76-.24.76-.54v-2c-3.11.67-3.77-1.5-3.77-1.5a2.97 2.97 0 00-1.26-1.64c-1.03-.7.08-.68.08-.68a2.34 2.34 0 011.7 1.15c1.02 1.8 2.98 1.28 3.71.98a2.7 2.7 0 01.8-1.7c-2.48-.28-5.1-1.26-5.1-5.6a4.38 4.38 0 011.17-3.05 4.06 4.06 0 01.11-3.01s.94-.3 3.08 1.16a10.37 10.37 0 015.6 0c2.12-1.46 3.05-1.16 3.05-1.16.44.94.48 2 .12 2.99a4.38 4.38 0 011.16 3.05c0 4.36-2.62 5.32-5.12 5.59a3.02 3.02 0 01.9 2.34v3.48c0 .33.2.66.78.55A11.25 11.25 0 0012 .75z" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<header>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <!-- Small circular headshot in navbar -->
+      <img src="img/profile.jpg" alt="Portrait of David C. Jeong" class="nav-photo" />
+
+      <div class="nav-name-group">
+        <div class="nav-name">David C. Jeong</div>
+        <div class="nav-title">Communication · Spatial Computing · Immersive Media</div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#news">News</a>
+      <a href="#publications">Publications</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-top">
+      <div>
+        <h1>David C. Jeong</h1>
+        <div class="hero-role">
+          Assistant Professor, Department of Communication, Santa Clara University
+        </div>
+        <p class="hero-description">
+          I study how emerging media technologies—such as virtual and extended reality,
+          social media platforms, and games—shape human behavior, ethics, and communication.
+          My work combines immersive design and quantitative methods to examine how
+          algorithms, metrics, and interfaces structure everyday interaction and public life.
+        </p>
+      </div>
+
+      <div class="hero-meta">
+        <div>
+          <div class="hero-meta-label">Affiliation</div>
+          <div>Santa Clara University</div>
+        </div>
+        <div>
+          <div class="hero-meta-label">Areas</div>
+          <div>Technology &amp; Communication, VR/XR, Social Media, Media Psychology</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero links: Scholar / DBLP / ORCID / LinkedIn / GitHub -->
+    <div class="hero-links">
+      <a class="hero-link-pill" href="https://scholar.google.com/citations?user=bkdeaJoAAAAJ&hl=en" target="_blank" rel="noopener">
+        <svg class="icon"><use href="#icon-scholar"/></svg> Scholar
+      </a>
+      <a class="hero-link-pill" href="https://dblp.org/pid/199/6700.html" target="_blank" rel="noopener">
+        <svg class="icon"><use href="#icon-dblp"/></svg> DBLP
+      </a>
+      <a class="hero-link-pill" href="https://orcid.org/0000-0002-8829-3578" target="_blank" rel="noopener">
+        <svg class="icon"><use href="#icon-orcid"/></svg> ORCID
+      </a>
+      <a class="hero-link-pill" href="https://www.linkedin.com/in/davidcjeong/" target="_blank" rel="noopener">
+        <svg class="icon"><use href="#icon-linkedin"/></svg> LinkedIn
+      </a>
+      <a class="hero-link-pill" href="https://github.com/Santa-Clara-Imaginarium-Lab" target="_blank" rel="noopener">
+        <svg class="icon"><use href="#icon-github"/></svg> GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-title">About</div>
+    <div class="section-subtitle">Background and current roles</div>
+
+    <div class="section-block two-col">
+      <div>
+        <p>
+          I am an Assistant Professor in the Department of Communication at Santa Clara University.
+          Broadly, my research focuses on how people experience and make sense of emerging media
+          technologies, with a particular interest in questions of morality, ethics, and design.
+        </p>
+        <p>
+          I work across virtual and extended reality, social media, and games to understand how design
+          decisions in algorithms, interfaces, and platform policies influence behavior, well-being,
+          and perceptions of others.
+        </p>
+        <p>
+          At SCU I direct the
+          <a href="https://www.scu.edu/imaginarium/" target="_blank" rel="noopener">Imaginarium Lab</a>,
+          a cross-campus hub at the intersection of technology, the arts, and the humanities. The lab is
+          dedicated to mixed reality (VR, AR, MR), data visualization, digital art, and game design, and
+          trains student developers in VR/AR design, user experience, and other project development skills
+          as they help build XR modules and prototypes for teaching and research.
+        </p>
+        <p class="muted">
+          <strong>Education</strong><br />
+          Ph.D., Communication, USC Annenberg School for Communication &amp; Journalism<br />
+          Ed.M., Mind, Brain &amp; Education, Harvard Graduate School of Education<br />
+          B.A., Communication Studies, UCLA
+        </p>
+        <p class="muted">
+          <strong>Current roles</strong><br />
+          Assistant Professor of Communication, Santa Clara University<br />
+          Director, SCU Media Lab<br />
+          Director, Imaginarium VR Lab
+        </p>
+        <p class="muted">
+          <strong>Service</strong><br />
+          Previously served as Chair of the
+          <a href="https://infosysica.org/" target="_blank" rel="noopener">
+            Information Systems Division of the International Communication Association
+          </a>.
+        </p>
+      </div>
+
+      <div class="about-photo-wrapper">
+        <!-- Larger portrait in About section -->
+        <img src="img/profile.jpg" alt="Portrait of David C. Jeong" class="about-photo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="section-title">Research</div>
+    <div class="section-subtitle">Themes and questions</div>
+
+    <div class="section-block two-col">
+      <div>
+        <p>
+          My research examines how media technologies structure interaction and moral decision-making
+          in both immersive and everyday contexts. I am especially interested in how metrics, dashboards,
+          and recommendation systems on social media shape motivation, expression, and perceptions of
+          toxicity and free speech.
+        </p>
+        <p>
+          In parallel, I work with VR/XR systems and game engines to create representative environments
+          that let us study complex social situations with experimental control, including how people move,
+          act, and respond to virtual agents and others in shared spaces. Through the Imaginarium Lab,
+          we collaborate across disciplines to design XR modules, data visualizations, and interactive
+          installations that support research, teaching, and public engagement.
+        </p>
+        <p>
+          Recent and ongoing projects include work on the perceived realism of XR experiences,
+          mixed-method studies of social VR platforms like VRChat and their role in stress and coping,
+          and collaborative VR/AR projects that support community heritage and decolonial storytelling
+          with partners such as the Community Heritage Lab and the Ohlone community.
+        </p>
+        <p class="muted">
+          Industry collaborations and conversations have involved Meta, NVIDIA, Apple, and Google
+          around immersive media, spatial computing, and responsible platform and interface design.
+        </p>
+      </div>
+
+      <div>
+        <p class="muted"><strong>Current themes</strong></p>
+        <ul class="tag-list">
+          <li>Spatial computing &amp; XR</li>
+          <li>Immersive storytelling &amp; worldbuilding</li>
+          <li>Social VR &amp; online communities</li>
+          <li>Social media metrics &amp; dashboards</li>
+          <li>Platform governance &amp; free speech</li>
+          <li>Media psychology, morality &amp; well-being</li>
+          <li>Data visualization &amp; interactive media</li>
+          <li>Community-engaged &amp; decolonial design</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- XR DEMO / GAUSSIAN SPLAT -->
+    <div class="section-block">
+      <div class="xr-demo-header">Interactive XR / 3D Capture</div>
+      <p class="xr-demo-description">
+        A small interactive example of recent XR and 3D work: a photorealistic Gaussian splatting capture
+        of a lily in studio lighting, rendered in real-time. Use your mouse or touch to explore the object
+        from different viewpoints.
+      </p>
+      <div class="xr-demo-frame">
+        <div class="xr-demo-inner">
+          <iframe
+            src="https://superspl.at/s?id=6d034985"
+            title="Lily Studio Light — 3D Gaussian Splat"
+            allow="fullscreen; xr-spatial-tracking"
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+      <p class="xr-demo-note">
+        Original capture hosted on
+        <a href="https://superspl.at/view?id=6d034985" target="_blank" rel="noopener">SuperSplat</a>.
+        For best results, view on a modern desktop browser.
+      </p>
+    </div>
+  </section>
+
+  <!-- NEWS / UPDATES -->
+  <section id="news">
+    <div class="section-title">News &amp; Updates</div>
+    <div class="section-subtitle">Recent activity and posts</div>
+
+    <div class="section-block">
+      <ul class="news-list">
+        <li>
+          <span class="news-date">2025</span>
+          <span class="news-text">
+            For the most recent updates on ongoing projects, talks, and Imaginarium Lab activities,
+            see my <a href="https://www.linkedin.com/in/davidcjeong/recent-activity/all/" target="_blank" rel="noopener">recent posts on LinkedIn</a>.
+          </span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="section-title">Selected Publications</div>
+    <div class="section-subtitle">
+      Selected recent work organized by theme
+      (for a full and up-to-date list, see Google Scholar)
+    </div>
+
+    <div class="section-block">
+      <!-- XR -->
+      <div class="pub-theme-title">XR / Virtual &amp; Extended Reality</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            Stress and coping in VRChat: A mixed-method case study of the use of VRChat as a coping tool during the COVID-19 pandemic.
+          </div>
+          <div class="pub-meta">
+            Leith, A. P., Lim, C., Foxman, M., Beyea, D., &amp; Jeong, D. C. (2025).
+            <em>Computers in Human Behavior Reports</em>, advance online publication.
+          </div>
+          <div class="pub-tags">XR · Health · Social Media</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            The Alt-Self: Investigating the inclusivity of self-avatar representations in social VR.
+          </div>
+          <div class="pub-meta">
+            Javier, M., Wheeler, S., Ni, Q., Drivas, M., Fitzsimmons, S., <em>et al.</em>, &amp; Jeong, D. C. (2024).
+            In <em>CHI PLAY ’24 Companion: Extended Abstracts of the Annual Symposium on Computer-Human Interaction in Play</em>, 131–138.
+          </div>
+          <div class="pub-tags">XR · Social VR · Identity</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            Protean kinematics: A blended model of VR physics.
+          </div>
+          <div class="pub-meta">
+            Jeong, D. C., Kim, S. S. Y., Xu, J. J., &amp; Miller, L. C. (2021).
+            <em>Frontiers in Psychology, 12</em>, 705170.
+          </div>
+          <div class="pub-tags">XR · Motion · Modeling</div>
+        </li>
+      </ul>
+
+      <!-- AI -->
+      <div class="pub-theme-title">AI / Machine Learning</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            User–agent bond in generalizable environments: Long-term risk reduction via nudged virtual choices.
+          </div>
+          <div class="pub-meta">
+            Wang, L., Christensen, J. L., Smith, B. J., Gillig, T. K., Jeong, D. C., <em>et al.</em> (2021).
+            <em>Frontiers in Psychology, 12</em>, 695389.
+          </div>
+          <div class="pub-tags">AI · Virtual Agents · Behavior Change</div>
+        </li>
+      </ul>
+
+      <!-- COMPUTER VISION -->
+      <div class="pub-theme-title">Computer Vision / 3D Pose &amp; Mesh Estimation</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            Fish2Mesh Transformer: 3D Human Mesh Recovery from Egocentric Vision.
+          </div>
+          <div class="pub-meta">
+            Jeong, D. C., Puranik, A., Vong, J., Deogirikar, V. A., Fell, R., Dietrich, J., Kyrarini, M., &amp; Kitts, C. A. (2025).
+            <em>CoRR, abs/2503.06089</em>.
+          </div>
+          <div class="pub-tags">Computer Vision · Mesh Recovery · Egocentric XR</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            SoloPose: One-Shot Kinematic 3D Human Pose Estimation with Video Data Augmentation.
+          </div>
+          <div class="pub-meta">
+            Jeong, D. C., Liu, H., Salazar, S., Jiang, J., &amp; Kitts, C. A. (2023).
+            <em>CoRR, abs/2312.10195</em>.
+          </div>
+          <div class="pub-tags">Computer Vision · 3D Pose · Data Augmentation</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            Inverse kinematics and temporal convolutional networks for sequential pose analysis in VR.
+          </div>
+          <div class="pub-meta">
+            Jeong, D. C., Xu, J. J., &amp; Miller, L. C. (2020).
+            In <em>2020 IEEE International Conference on Artificial Intelligence and Virtual Reality (AIVR)</em>, 274–281.
+          </div>
+          <div class="pub-tags">Computer Vision · Pose Estimation · XR</div>
+        </li>
+      </ul>
+
+      <!-- Robotics -->
+      <div class="pub-theme-title">Robotics / Human–Robot Interaction</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            Real-Time Acoustic Holography With Physics-Based Deep Learning for Robotic Manipulation.
+          </div>
+          <div class="pub-meta">
+            Zhong, C., Li, J., Sun, Z., Li, T., Guo, Y., Jeong, D. C., Su, H., &amp; Liu, S. (2024).
+            <em>IEEE Transactions on Automation Science and Engineering, 21(3)</em>, 4155–4164.
+          </div>
+          <div class="pub-tags">Robotics · Acoustic Holography · Automation</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            Noncontact Particle Manipulation on Water Surface with Ultrasonic Phased Array System and Microscopic Vision.
+          </div>
+          <div class="pub-meta">
+            Zhang, Y., Li, J., Jia, Y., Li, T., Wang, Y., Jeong, D. C., Su, H., &amp; Liu, S. (2023).
+            In <em>2023 IEEE International Conference on Robotics and Automation (ICRA)</em>, 5459–5465.
+          </div>
+          <div class="pub-tags">Robotics · Ultrasonics · ICRA 2023</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            MoEmo Vision Transformer: Integrating Cross-Attention and Movement Vectors in 3D Pose Estimation for HRI Emotion Detection.
+          </div>
+          <div class="pub-meta">
+            Jeong, D. C., Shen, T., Liu, H., Kapoor, R., Nguyen, C., Liu, S., &amp; Kitts, C. A. (2023).
+            In <em>2023 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</em>, 9846–9852.
+          </div>
+          <div class="pub-tags">HRI · Vision Transformer · IROS 2023</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            AcousNet: A Deep Learning Based Approach to Dynamic 3D Holographic Acoustic Field Generation From Phased Transducer Array.
+          </div>
+          <div class="pub-meta">
+            Zhong, C., Jia, Y., Jeong, D. C., Guo, Y., &amp; Liu, S. (2022).
+            <em>IEEE Robotics and Automation Letters, 7(2)</em>, 666–673.
+          </div>
+          <div class="pub-tags">Robotics · RA-L · Acoustic Control</div>
+        </li>
+      </ul>
+
+      <!-- Health -->
+      <div class="pub-theme-title">Health Communication</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            Friends over doctors? The influences of source and perceived customization on college drinking.
+          </div>
+          <div class="pub-meta">
+            Niu, Z., Jeong, D. C., &amp; Willoughby, J. F. (2021).
+            <em>Health Communication, 36(6)</em>, 671–681.
+          </div>
+          <div class="pub-tags">Health · Alcohol Use · Message Design</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            An experimental investigation into promoting mental health service use on social media: Effects of source and comments.
+          </div>
+          <div class="pub-meta">
+            Niu, Z., Hu, L., Jeong, D. C., Brickman, J., &amp; Stapleton, J. L. (2020).
+            <em>International Journal of Environmental Research and Public Health, 17(21)</em>, 7898.
+          </div>
+          <div class="pub-tags">Health · Social Media · Mental Health</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            A picture worth a thousand texts? Investigating the influences of visual appeals in a text message-based health intervention.
+          </div>
+          <div class="pub-meta">
+            Niu, Z., Jeong, D. C., Brickman, J., Nam, Y., Liu, S., &amp; Stapleton, J. L. (2020).
+            <em>Journal of Health Communication, 25(3)</em>, 204–213.
+          </div>
+          <div class="pub-tags">Health · Visual Design · Mobile Messaging</div>
+        </li>
+      </ul>
+
+      <!-- Social Media -->
+      <div class="pub-theme-title">Social Media / Games / Platforms</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            Shifting the Meta: Bridging the gap between scholar and developer perspectives of the post-pandemic game industry.
+          </div>
+          <div class="pub-meta">
+            Redinbo, J., Patwardhan, G., Foxman, M., &amp; Jeong, D. C. (2025).
+            In <em>Abstract Proceedings of DiGRA 2025: Games at the Crossroads</em>.
+          </div>
+          <div class="pub-tags">Games · Industry · Platforms</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            Snap back to reality: Examining the cognitive mechanisms underlying Snapchat.
+          </div>
+          <div class="pub-meta">
+            Jeong, D. C., &amp; Lee, J. (2017).
+            <em>Computers in Human Behavior, 77</em>, 274–281.
+          </div>
+          <div class="pub-tags">Social Media · Attention · Ephemerality</div>
+        </li>
+      </ul>
+
+      <!-- Cognitive Psychology -->
+      <div class="pub-theme-title">Cognitive Psychology / Morality</div>
+      <ul class="pub-list">
+        <li>
+          <div class="pub-title">
+            Parental rejection after coming out: Detachment, shame, and the reparative power of romantic love.
+          </div>
+          <div class="pub-meta">
+            Kim, H. M., Jeong, D. C., Appleby, P. R., Christensen, J. L., &amp; Miller, L. C. (2021).
+            <em>International Journal of Communication, 15</em>.
+          </div>
+          <div class="pub-tags">Cognitive · Emotion · Relationships</div>
+        </li>
+        <li>
+          <div class="pub-title">
+            “Is it just me?”: Evaluating attribution of negative feedback as a function of virtual instructor’s gender and proxemics.
+          </div>
+          <div class="pub-meta">
+            Feng, D., Jeong, D. C., Krämer, N. C., Miller, L. C., &amp; Marsella, S. (2017).
+            In <em>Proceedings of the 16th Conference on Autonomous Agents and MultiAgent Systems</em>, 810–818.
+          </div>
+          <div class="pub-tags">Cognitive · Attribution · Virtual Agents</div>
+        </li>
+      </ul>
+
+      <p class="muted" style="margin-top: 1.2rem; font-size: 0.83rem;">
+        For a complete and up-to-date list of publications, please see
+        <a href="https://scholar.google.com/citations?user=bkdeaJoAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>,
+        <a href="https://dblp.org/pid/199/6700.html" target="_blank" rel="noopener">DBLP</a>,
+        and
+        <a href="https://orcid.org/0000-0002-8829-3578" target="_blank" rel="noopener">ORCID</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- TEACHING -->
+  <section id="teaching">
+    <div class="section-title">Teaching</div>
+    <div class="section-subtitle">Courses and approach</div>
+
+    <div class="section-block two-col">
+      <div>
+        <p class="muted"><strong>Courses at Santa Clara University</strong></p>
+        <ul class="course-list">
+          <li><span class="course-code">COMM 12</span>Technology and Communication</li>
+          <li><span class="course-code">COMM 110</span>Quantitative Research Methods</li>
+          <li><span class="course-code">COMM 113A</span>Media Psychology</li>
+          <li><span class="course-code">COMM 169 / 170</span>VR Design &amp; Development</li>
+        </ul>
+      </div>
+      <div>
+        <p>
+          In my teaching, I aim to connect conceptual foundations and critical perspectives with
+          hands-on engagement with contemporary media technologies. Students work with real-world
+          platforms, data, and immersive tools to understand both how systems function and how they
+          might be redesigned for better social outcomes.
+        </p>
+        <p>
+          I prioritize collaborative, inclusive classroom environments where students are encouraged
+          to experiment, ask difficult questions about technology and power, and translate theory
+          into creative and empirical work.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-title">Contact</div>
+    <div class="section-subtitle">Email and profiles</div>
+
+    <div class="section-block">
+      <p>
+        The easiest way to reach me is by email. I welcome inquiries from prospective students,
+        collaborators, and community partners interested in communication, technology, VR/XR,
+        social media, and media psychology.
+      </p>
+      <p class="muted">
+        <strong>Email:</strong>
+        <a href="mailto:dcjeong@scu.edu">dcjeong@scu.edu</a><br />
+        <strong>Affiliation:</strong>
+        Department of Communication, Santa Clara University<br />
+        <strong>Campus office:</strong>
+        Vari Hall, Santa Clara, CA
+      </p>
+      <p class="muted">
+        <strong>Profiles:</strong>
+        <a href="https://scholar.google.com/citations?user=bkdeaJoAAAAJ&hl=en" target="_blank" rel="noopener">
+          <svg class="icon-sm"><use href="#icon-scholar"/></svg>Scholar
+        </a> ·
+        <a href="https://dblp.org/pid/199/6700.html" target="_blank" rel="noopener">
+          <svg class="icon-sm"><use href="#icon-dblp"/></svg>DBLP
+        </a> ·
+        <a href="https://orcid.org/0000-0002-8829-3578" target="_blank" rel="noopener">
+          <svg class="icon-sm"><use href="#icon-orcid"/></svg>ORCID
+        </a> ·
+        <a href="https://www.linkedin.com/in/davidcjeong/" target="_blank" rel="noopener">
+          <svg class="icon-sm"><use href="#icon-linkedin"/></svg>LinkedIn
+        </a> ·
+        <a href="https://github.com/Santa-Clara-Imaginarium-Lab" target="_blank" rel="noopener">
+          <svg class="icon-sm"><use href="#icon-github"/></svg>GitHub
+        </a> ·
+        <a href="https://infosysica.org/" target="_blank" rel="noopener">ICA Information Systems Division</a> ·
+        <a href="https://www.scu.edu/imaginarium/" target="_blank" rel="noopener">Imaginarium Lab</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>© <span id="year"></span> David C. Jeong</div>
+  <div class="footer-links">
+    <a href="https://scholar.google.com/citations?user=bkdeaJoAAAAJ&hl=en" target="_blank" rel="noopener">
+      <svg class="icon-sm"><use href="#icon-scholar"/></svg>Scholar
+    </a>
+    <a href="https://dblp.org/pid/199/6700.html" target="_blank" rel="noopener">
+      <svg class="icon-sm"><use href="#icon-dblp"/></svg>DBLP
+    </a>
+    <a href="https://orcid.org/0000-0002-8829-3578" target="_blank" rel="noopener">
+      <svg class="icon-sm"><use href="#icon-orcid"/></svg>ORCID
+    </a>
+    <a href="https://www.linkedin.com/in/davidcjeong/" target="_blank" rel="noopener">
+      <svg class="icon-sm"><use href="#icon-linkedin"/></svg>LinkedIn
+    </a>
+    <a href="https://github.com/Santa-Clara-Imaginarium-Lab" target="_blank" rel="noopener">
+      <svg class="icon-sm"><use href="#icon-github"/></svg>GitHub
+    </a>
+    <a href="https://infosysica.org/" target="_blank" rel="noopener">
+      ICA InfoSys
+    </a>
+    <a href="https://www.scu.edu/imaginarium/" target="_blank" rel="noopener">
+      Imaginarium Lab
+    </a>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
