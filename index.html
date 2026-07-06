@@ -1299,14 +1299,14 @@
       } else if (lowerHref.includes("orcid.org")) {
         linkCategory = "orcid";
         intentGroup = "identity_verification";
-      } else if (lowerHref.includes("linkedin.com/in/")) {
-        linkCategory = "linkedin_profile";
-        intentGroup = "profile_verification";
-        sensitivity = "medium";
       } else if (lowerHref.includes("linkedin.com") && lowerHref.includes("recent-activity")) {
         linkCategory = "linkedin_recent_activity";
         intentGroup = "activity_checking";
         sensitivity = "high";
+      } else if (lowerHref.includes("linkedin.com/in/")) {
+        linkCategory = "linkedin_profile";
+        intentGroup = "profile_verification";
+        sensitivity = "medium";
       } else if (lowerHref.includes("github.com")) {
         linkCategory = "github";
         intentGroup = "technical_project_interest";
