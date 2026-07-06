@@ -1121,5 +1121,422 @@
   document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 
+
+<script>
+  /*
+    FINAL ANALYTICS INSTRUMENTATION — davidjeong.org
+
+    Visible-site impact: none.
+    Sends behavioral events to:
+      - Plausible custom events
+      - Google Analytics 4 via gtag
+
+    Privacy boundary:
+      - No IP logging added
+      - No fingerprinting libraries
+      - No hidden pixels
+      - No personal identity collection
+      - Uses first-party local/session storage only for coarse repeat-visit hints
+  */
+  (function () {
+    "use strict";
+
+    const CONFIG = {
+      localVisitKey: "dj_visit_count_v2",
+      firstSeenKey: "dj_first_seen_v2",
+      sessionFlagsKey: "dj_session_flags_v2",
+      maxLabelLength: 160,
+      scrollThresholds: [10, 25, 50, 75, 90, 100],
+      timeThresholds: [10, 15, 30, 60, 120, 240],
+      sectionThreshold: 0.34
+    };
+
+    function safeJsonParse(value, fallback) {
+      try { return JSON.parse(value); } catch (err) { return fallback; }
+    }
+
+    function readSessionFlags() {
+      try {
+        return safeJsonParse(sessionStorage.getItem(CONFIG.sessionFlagsKey) || "{}", {});
+      } catch (err) {
+        return {};
+      }
+    }
+
+    function writeSessionFlags(flags) {
+      try { sessionStorage.setItem(CONFIG.sessionFlagsKey, JSON.stringify(flags)); } catch (err) {}
+    }
+
+    function oncePerSession(key, fn) {
+      const flags = readSessionFlags();
+      if (flags[key]) return;
+      flags[key] = true;
+      writeSessionFlags(flags);
+      fn();
+    }
+
+    function safeUrl(url) {
+      try { return new URL(url, window.location.href); } catch (err) { return null; }
+    }
+
+    function urlLabel(url) {
+      const parsed = safeUrl(url);
+      if (!parsed) return String(url || "").slice(0, CONFIG.maxLabelLength);
+      return (parsed.hostname.replace(/^www\./, "") + parsed.pathname).slice(0, CONFIG.maxLabelLength);
+    }
+
+    function getQueryParam(name) {
+      try { return new URLSearchParams(window.location.search).get(name) || ""; } catch (err) { return ""; }
+    }
+
+    function getVisitMeta() {
+      let visitCount = 1;
+      let firstSeen = "";
+
+      try {
+        firstSeen = localStorage.getItem(CONFIG.firstSeenKey) || "";
+        if (!firstSeen) {
+          firstSeen = new Date().toISOString();
+          localStorage.setItem(CONFIG.firstSeenKey, firstSeen);
+        }
+
+        visitCount = Number(localStorage.getItem(CONFIG.localVisitKey) || "0") + 1;
+        localStorage.setItem(CONFIG.localVisitKey, String(visitCount));
+      } catch (err) {}
+
+      return {
+        visit_count_hint: visitCount,
+        first_seen_hint: firstSeen,
+        repeat_hint: visitCount >= 8 ? "repeat_high" : visitCount >= 3 ? "repeat_medium" : visitCount >= 2 ? "repeat_low" : "new_or_storage_unavailable"
+      };
+    }
+
+    const visitMeta = getVisitMeta();
+
+    function getBaseProps() {
+      const ref = document.referrer ? safeUrl(document.referrer) : null;
+      const nav = performance && performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+
+      return {
+        page_path: window.location.pathname || "/",
+        page_query_keys: Array.from(new URLSearchParams(window.location.search).keys()).join(",").slice(0, CONFIG.maxLabelLength),
+        page_title: document.title || "",
+        referrer_host: ref ? ref.hostname.replace(/^www\./, "") : "direct_or_unknown",
+        utm_source: getQueryParam("utm_source"),
+        utm_medium: getQueryParam("utm_medium"),
+        utm_campaign: getQueryParam("utm_campaign"),
+        utm_content: getQueryParam("utm_content"),
+        src: getQueryParam("src") || getQueryParam("source"),
+        screen_size: window.innerWidth + "x" + window.innerHeight,
+        viewport_bucket: window.innerWidth < 640 ? "mobile_small" : window.innerWidth < 900 ? "mobile_large_tablet" : "desktop",
+        language: navigator.language || "",
+        timezone: (Intl.DateTimeFormat && Intl.DateTimeFormat().resolvedOptions().timeZone) || "",
+        navigation_type: nav ? nav.type : "",
+        visit_count_hint: visitMeta.visit_count_hint,
+        repeat_hint: visitMeta.repeat_hint
+      };
+    }
+
+    function normalizeEventName(name) {
+      return String(name || "site_event")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "")
+        .slice(0, 40);
+    }
+
+    function sendEvent(name, props) {
+      const payload = Object.assign({}, getBaseProps(), props || {});
+
+      // Keep labels compact for analytics tools.
+      Object.keys(payload).forEach(function (key) {
+        if (typeof payload[key] === "string") {
+          payload[key] = payload[key].slice(0, CONFIG.maxLabelLength);
+        }
+      });
+
+      try {
+        if (typeof window.plausible === "function") {
+          window.plausible(name, { props: payload });
+        }
+      } catch (err) {}
+
+      try {
+        if (typeof window.gtag === "function") {
+          window.gtag("event", normalizeEventName(name), Object.assign({
+            event_category: payload.intent_group || payload.event_category || "site_behavior",
+            event_label: payload.link_category || payload.section || payload.depth || payload.link_text || name,
+            transport_type: "beacon"
+          }, payload));
+        }
+      } catch (err) {}
+    }
+
+    function classifyLink(anchor) {
+      const href = anchor.getAttribute("href") || "";
+      const text = (anchor.textContent || anchor.getAttribute("aria-label") || "").trim().replace(/\s+/g, " ");
+      const lowerHref = href.toLowerCase();
+      const lowerText = text.toLowerCase();
+      const parsed = safeUrl(href);
+
+      let linkCategory = "other";
+      let intentGroup = "general";
+      let sensitivity = "low";
+
+      if (lowerHref.startsWith("mailto:")) {
+        linkCategory = "email";
+        intentGroup = "contact_intent";
+        sensitivity = "high";
+      } else if (lowerHref.includes("scholar.google.com/citations")) {
+        linkCategory = "google_scholar_profile";
+        intentGroup = "research_verification";
+      } else if (lowerHref.includes("scholar.google.com/scholar?q=")) {
+        linkCategory = "scholar_publication_search";
+        intentGroup = "publication_interest";
+      } else if (lowerHref.includes("dblp.org")) {
+        linkCategory = "dblp";
+        intentGroup = "research_verification";
+      } else if (lowerHref.includes("orcid.org")) {
+        linkCategory = "orcid";
+        intentGroup = "identity_verification";
+      } else if (lowerHref.includes("linkedin.com/in/")) {
+        linkCategory = "linkedin_profile";
+        intentGroup = "profile_verification";
+        sensitivity = "medium";
+      } else if (lowerHref.includes("linkedin.com") && lowerHref.includes("recent-activity")) {
+        linkCategory = "linkedin_recent_activity";
+        intentGroup = "activity_checking";
+        sensitivity = "high";
+      } else if (lowerHref.includes("github.com")) {
+        linkCategory = "github";
+        intentGroup = "technical_project_interest";
+      } else if (lowerHref.includes("scu.edu/imaginarium")) {
+        linkCategory = "imaginarium_lab";
+        intentGroup = "lab_interest";
+      } else if (lowerHref.includes("scu.edu") || lowerText.includes("santa clara")) {
+        linkCategory = "scu_affiliation";
+        intentGroup = "affiliation_checking";
+        sensitivity = "high";
+      } else if (lowerHref.includes("infosysica.org")) {
+        linkCategory = "ica_infosys";
+        intentGroup = "service_verification";
+      } else if (lowerHref.includes("openaccess.thecvf.com") || lowerHref.includes("arxiv.org")) {
+        linkCategory = "paper_direct";
+        intentGroup = "publication_interest";
+      } else if (lowerHref.includes("superspl.at")) {
+        linkCategory = "xr_demo";
+        intentGroup = "project_demo_interest";
+      } else if (parsed && parsed.hostname !== window.location.hostname) {
+        linkCategory = parsed.hostname.replace(/^www\./, "");
+        intentGroup = "outbound_general";
+      }
+
+      return {
+        link_text: text.slice(0, CONFIG.maxLabelLength),
+        link_url_label: urlLabel(href),
+        link_category: linkCategory,
+        intent_group: intentGroup,
+        sensitivity_hint: sensitivity,
+        is_external: parsed ? String(parsed.hostname !== window.location.hostname) : "unknown"
+      };
+    }
+
+    function sectionIntent(sectionId) {
+      const map = {
+        top: "identity_check_or_landing",
+        about: "identity_or_affiliation_checking",
+        research: "research_interest",
+        news: "activity_checking",
+        publications: "research_interest",
+        teaching: "teaching_or_affiliation_checking",
+        contact: "contact_intent"
+      };
+      return map[sectionId] || "content_engagement";
+    }
+
+    // 1. Session profile.
+    oncePerSession("session_profile", function () {
+      sendEvent("Session profile", {
+        event_category: "session",
+        intent_group: "session_context",
+        first_seen_hint: visitMeta.first_seen_hint
+      });
+    });
+
+    // 2. Section visibility.
+    const sections = Array.prototype.slice.call(document.querySelectorAll("main section[id]"));
+    if ("IntersectionObserver" in window && sections.length) {
+      const sectionObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          const id = entry.target.id || "unknown";
+          oncePerSession("section_reached_" + id, function () {
+            sendEvent("Section reached", {
+              event_category: "section_depth",
+              section: id,
+              intent_group: sectionIntent(id)
+            });
+
+            if (["about", "news", "teaching", "contact"].indexOf(id) !== -1) {
+              sendEvent("Verification surface reached", {
+                event_category: "verification",
+                section: id,
+                intent_group: sectionIntent(id),
+                sensitivity_hint: id === "contact" ? "high" : "medium"
+              });
+            }
+
+            if (["research", "publications"].indexOf(id) !== -1) {
+              sendEvent("Research surface reached", {
+                event_category: "research",
+                section: id,
+                intent_group: "research_interest"
+              });
+            }
+          });
+        });
+      }, { threshold: CONFIG.sectionThreshold, rootMargin: "0px 0px -12% 0px" });
+
+      sections.forEach(function (section) { sectionObserver.observe(section); });
+    }
+
+    // 3. Scroll depth.
+    function getScrollDepth() {
+      const doc = document.documentElement;
+      const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+      const raw = Math.round((window.scrollY / max) * 100);
+      return Math.max(0, Math.min(100, raw));
+    }
+
+    let scrollRaf = false;
+    function checkScroll() {
+      if (scrollRaf) return;
+      scrollRaf = true;
+      requestAnimationFrame(function () {
+        scrollRaf = false;
+        const depth = getScrollDepth();
+        CONFIG.scrollThresholds.forEach(function (threshold) {
+          if (depth >= threshold) {
+            oncePerSession("scroll_depth_" + threshold, function () {
+              sendEvent("Scroll depth", {
+                event_category: "engagement_depth",
+                depth: String(threshold),
+                intent_group: threshold >= 75 ? "deep_reading" : "surface_reading"
+              });
+            });
+          }
+        });
+      });
+    }
+
+    window.addEventListener("scroll", checkScroll, { passive: true });
+    window.addEventListener("resize", checkScroll);
+    checkScroll();
+
+    // 4. Link tracking.
+    document.addEventListener("click", function (event) {
+      const anchor = event.target.closest ? event.target.closest("a[href]") : null;
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href") || "";
+      const linkInfo = classifyLink(anchor);
+
+      if (href.charAt(0) === "#") {
+        const targetSection = href.slice(1) || "top";
+        sendEvent("Internal nav click", {
+          event_category: "navigation",
+          target_section: targetSection,
+          link_text: (anchor.textContent || "").trim().slice(0, CONFIG.maxLabelLength),
+          intent_group: sectionIntent(targetSection)
+        });
+        return;
+      }
+
+      if (href.toLowerCase().startsWith("mailto:")) {
+        sendEvent("Email click", linkInfo);
+        sendEvent("Contact intent", linkInfo);
+        return;
+      }
+
+      if (linkInfo.is_external === "true") {
+        sendEvent("Outbound click", linkInfo);
+
+        if (["profile_verification", "activity_checking", "identity_verification", "affiliation_checking", "service_verification"].indexOf(linkInfo.intent_group) !== -1) {
+          sendEvent("Verification behavior", linkInfo);
+        }
+
+        if (["research_verification", "publication_interest", "technical_project_interest", "project_demo_interest", "lab_interest"].indexOf(linkInfo.intent_group) !== -1) {
+          sendEvent("Research behavior", linkInfo);
+        }
+      }
+    }, true);
+
+    // 5. Copy behavior for contact/affiliation text.
+    document.addEventListener("copy", function () {
+      const selection = String(window.getSelection ? window.getSelection() : "").slice(0, CONFIG.maxLabelLength);
+      const lower = selection.toLowerCase();
+      let copiedHint = "";
+
+      if (lower.indexOf("@") !== -1) copiedHint = "email";
+      else if (lower.indexOf("santa clara") !== -1 || lower.indexOf("scu") !== -1) copiedHint = "affiliation_scu";
+      else if (lower.indexOf("department") !== -1) copiedHint = "department";
+      else if (lower.indexOf("vari hall") !== -1) copiedHint = "office";
+      else if (lower.indexOf("assistant professor") !== -1) copiedHint = "title";
+      else if (lower.indexOf("imaginarium") !== -1) copiedHint = "lab";
+
+      if (copiedHint) {
+        sendEvent("Contact or affiliation copied", {
+          event_category: "copy_behavior",
+          copied_hint: copiedHint,
+          intent_group: "contact_or_affiliation_checking",
+          sensitivity_hint: "high"
+        });
+      }
+    });
+
+    // 6. Time-on-page milestones.
+    CONFIG.timeThresholds.forEach(function (seconds) {
+      window.setTimeout(function () {
+        oncePerSession("time_on_page_" + seconds, function () {
+          sendEvent("Time on page", {
+            event_category: "engagement_time",
+            seconds: String(seconds),
+            intent_group: seconds >= 60 ? "sustained_attention" : "brief_attention"
+          });
+        });
+      }, seconds * 1000);
+    });
+
+    // 7. Rage / repeated clicks on same link category.
+    const linkClickCounts = {};
+    document.addEventListener("click", function (event) {
+      const anchor = event.target.closest ? event.target.closest("a[href]") : null;
+      if (!anchor) return;
+
+      const info = classifyLink(anchor);
+      const key = info.link_category;
+      linkClickCounts[key] = (linkClickCounts[key] || 0) + 1;
+
+      if (linkClickCounts[key] === 3) {
+        sendEvent("Repeated link behavior", {
+          event_category: "repeat_interaction",
+          link_category: key,
+          intent_group: info.intent_group,
+          sensitivity_hint: info.sensitivity_hint
+        });
+      }
+    }, true);
+
+    // 8. Page exit summary.
+    window.addEventListener("pagehide", function () {
+      sendEvent("Page exit summary", {
+        event_category: "session",
+        max_scroll_depth: String(getScrollDepth()),
+        intent_group: "exit_summary"
+      });
+    });
+  })();
+</script>
+
 </body>
 </html>
